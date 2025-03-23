@@ -4,33 +4,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Posts Per User</title>
-  <style>
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-    }
-    th {
-      background-color: #f4f4f4;
-    }
-  </style>
+  <!-- Bootstrap CSS -->
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
+   rel="stylesheet" 
+   integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
+   crossorigin="anonymous">
 </head>
-<body>
-  <h1>Posts Per User</h1>
-  <table id="postsTable">
-    <thead>
-      <tr>
-        <th>User Name</th>
-        <th>Email</th>
-        <th>Post Title</th>
-        <th>Post Content</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+<body class="bg-light">
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">Posts Per User</h1>
+    <table id="postsTable" class="table table-striped table-bordered">
+      <thead class="table-dark">
+        <tr>
+          <th>User Name</th>
+          <th>Email</th>
+          <th>Post Title</th>
+          <th>Post Content</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
+  integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
+  crossorigin="anonymous"></script>
 
   <script>
     async function fetchPostsPerUser() {
@@ -42,16 +41,27 @@
         tableBody.innerHTML = "";
 
         data.forEach((user) => {
-          user.posts.forEach((post) => {
+          if (user.posts.length === 0) {
+            // If no posts, add a row with "No posts"
             const row = document.createElement("tr");
             row.innerHTML = `
               <td>${user.name}</td>
               <td>${user.email}</td>
-              <td>${post.title}</td>
-              <td>${post.content}</td>
+              <td colspan="2" class="text-center text-muted">No posts</td>
             `;
             tableBody.appendChild(row);
-          });
+          } else {
+            user.posts.forEach((post) => {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                <td>${user.name}</td>
+                <td>${user.email}</td>
+                <td>${post.title}</td>
+                <td>${post.content}</td>
+              `;
+              tableBody.appendChild(row);
+            });
+          }
         });
       } catch (error) {
         console.error("Error fetching posts per user:", error.message);
